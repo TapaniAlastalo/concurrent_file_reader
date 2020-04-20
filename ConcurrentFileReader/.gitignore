@@ -1,5 +1,5 @@
 # Visual Studio cache directory
-.vs/
+vs
 *.csproj
 *.sln
 *.tmp
