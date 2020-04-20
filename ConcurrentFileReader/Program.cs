@@ -11,7 +11,10 @@ namespace ConcurrentFileReader
         static void Main(string[] args)
         {
             // Run example
-            Example.Run();
+            // Example.Run(); - PASS
+            
+            // Run FileHandler Test
+            FileHandlerTest.Run();
         }
     }
 
