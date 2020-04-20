@@ -31,8 +31,7 @@ namespace ConcurrentFileReader
             if (File.Exists(path))
             {
                 try
-                {
-                    // Open the file to read from.
+                {                    
                     using (StreamReader sr = File.OpenText(path))
                     {
                         string s;
@@ -58,40 +57,28 @@ namespace ConcurrentFileReader
                 try
                 {
                     // Open the file to read from.
-                    using (FileStream fsSource = new FileStream(path, FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         // Read the source file into a byte array.
-                        byte[] bytes = new byte[fsSource.Length];
-                        long maxLength = fsSource.Length;
-                        // Debug
-                        Console.WriteLine("Max length: " + maxLength);
-
-
-                        if (offset + length <= maxLength)
+                        byte[] buffer = new byte[fs.Length];
+                        long maxLength = fs.Length;
+                        
+                        // Limit length to avoid out of bounds
+                        if(offset + length > maxLength)
                         {
-                            fsSource.Read(bytes, offset, length);
+                            length = (int)(maxLength - (long)offset);
                         }
-                        /*while (length > 0)
-                        {
-                            // Read may return anything from 0 to length.
-                            int n = fsSource.Read(bytes, offset, length);
 
-                            // Debug
-                            Console.WriteLine("Found: " + n);
-
-                            // Break when the end of the file is reached.
-                            if (n == 0)
-                                break;
-
-                            offset += n;
-                            length -= n;
-                        }
-                        length = bytes.Length;
-                        */
-
+                        // set offset
+                        //fs.Position = offset;
+                        fs.Seek(offset, SeekOrigin.Begin);
+                        fs.Read(buffer, 0, length);
+            
                         // add to return values
-                        values += Encoding.UTF8.GetString(bytes);
+                        values += Encoding.UTF8.GetString(buffer, 0, length); // Encoding.UTF8.GetString(buffer);
 
+                        // close
+                        fs.Close();
                     }
                 }
                 catch (FileNotFoundException fnfe)
@@ -121,7 +108,7 @@ namespace ConcurrentFileReader
         {
             Console.WriteLine("TEST Read From File with offset");
             string path = "test_files\\test1.txt";
-            int offset = 40;
+            int offset = 4;
             int length = 20;
             string txt = FileHandler.ReadFromFile(path, offset, length);
             Console.WriteLine("File Read:");

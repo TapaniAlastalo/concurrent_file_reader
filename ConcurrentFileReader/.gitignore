@@ -1,0 +1,10 @@
+# Visual Studio cache directory
+.vs/
+*.csproj
+*.sln
+*.tmp
+*.user
+
+# Custom
+bin/
+test_files/
