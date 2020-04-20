@@ -63,20 +63,22 @@ namespace ConcurrentFileReader
                         byte[] buffer = new byte[fs.Length];
                         long maxLength = fs.Length;
                         
-                        // Limit length to avoid out of bounds
-                        if(offset + length > maxLength)
+                        if(offset < maxLength)
                         {
-                            length = (int)(maxLength - (long)offset);
+                            // Limit length to avoid out of bounds
+                            if (offset + length > maxLength)
+                            {
+                                length = (int)(maxLength - (long)offset);
+                            }
+
+                            // set offset
+                            //fs.Position = offset;
+                            fs.Seek(offset, SeekOrigin.Begin);
+                            fs.Read(buffer, 0, length);
+
+                            // add to return values
+                            values += Encoding.UTF8.GetString(buffer, 0, length); // Encoding.UTF8.GetString(buffer);
                         }
-
-                        // set offset
-                        //fs.Position = offset;
-                        fs.Seek(offset, SeekOrigin.Begin);
-                        fs.Read(buffer, 0, length);
-            
-                        // add to return values
-                        values += Encoding.UTF8.GetString(buffer, 0, length); // Encoding.UTF8.GetString(buffer);
-
                         // close
                         fs.Close();
                     }
