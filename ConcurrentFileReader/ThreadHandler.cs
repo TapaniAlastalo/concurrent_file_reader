@@ -1,75 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.IO;
+
 
 namespace ConcurrentFileReader
 {
-    public class TaskHandler
+    public class ThreadHandler
     {
         public const int WAIT_DELAY = 10;
-        
+
         // FILE        
-        private int taskCount;
+        private int threadCount;
         private int maxQueue;
 
         private string path;
         private int readLength;
-                
-        public TaskHandler(int taskCount, int maxQueue, string path, int readLength)
+
+        public ThreadHandler(int threadCount, int maxQueue, string path, int readLength)
         {
-            this.taskCount = taskCount;
+            this.threadCount = threadCount;
             this.maxQueue = maxQueue;
             this.path = path;
             this.readLength = readLength;
         }
 
-        public int RunTasks()
+        public int RunThreads()
         {
             // Create blocking queue for communication.
             //using (var queue = new ResultCollection())
             using (var results = new ResultCollection(maxQueue))
             {
                 // Create tasks
-                var tasks = new List<Task>();
-                for (int i = 0; i < taskCount; i++)
+                var threads = new List<Thread>();
+                for (int i = 0; i < threadCount; i++)
                 {
-                    tasks.Add(ReadWriteAsync(i, results));
+                    threads.Add(new Thread(() => ReadWriteWork(i, results)));
+                }
+                
+                // Start Threads
+                foreach (var thread in threads)
+                {
+                    thread.Start();
                 }
 
-                // Wait for all tasks to complete
-                Task.WaitAll(tasks.ToArray());
+                // Wait for all Threads to complete
+                foreach (var thread in threads)
+                {
+                    thread.Join();
+                }
 
                 // Results
                 return CheckResults(results);
             }
         }
 
-        private async Task ReadWriteAsync(int counter, ResultCollection results)
+        private void ReadWriteWork(int counter, ResultCollection results)
         {
             // Read File
-            //Console.WriteLine("START TASK-" + counter);
+            //Console.WriteLine("START THREAD-" + counter);
 
-            // just wait
-            //await WaitABit();
-            
             int offset = counter * readLength;
             string foundText = FileHandler.ReadFromFile(path, offset, readLength);
-            
-            // DEBUG
-            //Console.WriteLine("TASK-" + counter + " Read: " + foundText);
 
-            
+            // DEBUG
+            //Console.WriteLine("THREAD-" + counter + " Read: " + foundText);
+
+
             // just wait
             //await WaitABit();                
             if (!results.TryAdd(foundText))
             {
-                //Console.WriteLine($"TASK-{counter}: Couldn't add text. Queue length: {results.SQueue.Count}");
+                //Console.WriteLine($"THREAD-{counter}: Couldn't add text. Queue length: {results.SQueue.Count}");
             }
             else
             {
-                //Console.WriteLine($"TASK-{counter}: Added text. Queue length: {results.SQueue.Count}");
+                //Console.WriteLine($"THREAD-{counter}: Added text. Queue length: {results.SQueue.Count}");
             }
         }
 
@@ -84,11 +91,6 @@ namespace ConcurrentFileReader
                 //Console.WriteLine($"\t\t\t\t\t\t\tCHECK-OUT: Success: SUM = {value}. Queue length: {results.SQueue.Count}");
             }
             return value;
-        }
-
-        private async Task WaitABit()
-        {
-            await Task.Delay(WAIT_DELAY);
         }
     }
 }

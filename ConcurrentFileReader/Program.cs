@@ -4,21 +4,7 @@
     {
         static void Main(string[] args)
         {
-            RunTests();
+            new Tester().RunTests();
         }
-
-        private static void RunTests()
-        {
-            // Run example
-            // Example.Run(); // PASS
-
-            // Run FileHandler Test
-            //FileHandlerTest.Run(); // PASS
-
-            new TaskHandler().RunTasks();
-        }
-
-        
-
     }
 }

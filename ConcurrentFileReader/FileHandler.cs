@@ -5,7 +5,7 @@ using System.Text;
 namespace ConcurrentFileReader
 {
     abstract class FileHandler
-    {
+    {        
         public static void WriteToFile(string text, string path)
         {
             try
@@ -89,6 +89,31 @@ namespace ConcurrentFileReader
                 }
             }
             return values;
+        }
+
+        // Returns file length. Returns -1 if file not found. Returns -2 if problems opening the filestream.
+        public static long GetFileLength(string path)
+        {
+            if (File.Exists(path))
+            {
+                long length;
+                try
+                {
+                    // Open the file to read from.
+                    using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        // Read the source file into a byte array.
+                        length = fs.Length;
+                        fs.Close();
+                    }
+                }
+                catch (Exception e)
+                {
+                    return -2;
+                }
+                return length;
+            }
+            return -1;
         }
     }
 
