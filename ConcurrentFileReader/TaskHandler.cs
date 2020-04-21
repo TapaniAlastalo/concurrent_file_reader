@@ -7,13 +7,14 @@ namespace ConcurrentFileReader
 {
     public class TaskHandler
     {
-        const int RUNNERS = 10; 
+        const int RUNNERS = 100; 
         const int WAIT_DELAY = 10;
         const int QUEUE_LIMIT = 1000*1000;
 
         // FILE
-        const string PATH = "test_files\\test1.txt";
-        const int LENGTH = 10;
+        //const string PATH = "test_files\\test3.txt";
+        const string PATH = "test_files\\test4.txt";
+        const int LENGTH = 10*1000;
 
         public void RunTasks()
         {
@@ -48,7 +49,7 @@ namespace ConcurrentFileReader
             string foundText = FileHandler.ReadFromFile(PATH, offset, LENGTH);
             
             // DEBUG
-            Console.WriteLine("TASK-" + counter + " Read: " + foundText);
+            //Console.WriteLine("TASK-" + counter + " Read: " + foundText);
 
             
             // just wait
