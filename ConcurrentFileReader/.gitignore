@@ -1,10 +1,12 @@
 # Visual Studio cache directory
-vs
-Properties
+.vs
+
 *.csproj
 *.sln
 *.tmp
 *.user
 
-bin/
-test_files/
+Properties
+bin
+test_files
+obj
