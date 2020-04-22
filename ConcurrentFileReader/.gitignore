@@ -6,6 +6,5 @@ Properties
 *.tmp
 *.user
 
-# Custom
 bin/
 test_files/

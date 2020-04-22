@@ -1,7 +1,0 @@
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\bin\Debug\ConcurrentFileReader.exe.config
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\bin\Debug\ConcurrentFileReader.exe
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\bin\Debug\ConcurrentFileReader.pdb
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\obj\Debug\ConcurrentFileReader.csprojAssemblyReference.cache
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\obj\Debug\ConcurrentFileReader.csproj.CoreCompileInputs.cache
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\obj\Debug\ConcurrentFileReader.exe
-R:\Koodaus\repos\jamk\concurrent_file_reader\ConcurrentFileReader\obj\Debug\ConcurrentFileReader.pdb
